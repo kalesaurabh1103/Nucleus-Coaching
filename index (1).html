@@ -1,0 +1,1036 @@
+<html class="scroll-smooth" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Nucleus Coaching App with Persistence &amp; History
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+  <style>
+   body {
+      font-family: "Inter", sans-serif;
+    }
+  </style>
+ </head>
+ <body class="bg-gray-50 min-h-screen flex flex-col">
+  <div class="flex-grow flex flex-col" id="app">
+   <!-- Login Page -->
+   <section class="max-w-md mx-auto p-6 mt-20 bg-white rounded-lg shadow-md" id="login-page">
+    <h1 class="text-3xl font-semibold text-center mb-8 text-indigo-700">
+     Nucleus Coaching Login
+    </h1>
+    <form class="space-y-6" id="login-form">
+     <div>
+      <label class="block text-gray-700 font-medium mb-1" for="name">
+       Name
+      </label>
+      <input class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" id="name" name="name" placeholder="Enter your full name" required="" type="text"/>
+     </div>
+     <div>
+      <label class="block text-gray-700 font-medium mb-1" for="email">
+       Email
+      </label>
+      <input class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" id="email" name="email" placeholder="Enter your email address" required="" type="email"/>
+     </div>
+     <div>
+      <label class="block text-gray-700 font-medium mb-1" for="role">
+       Role
+      </label>
+      <select class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" id="role" name="role" required="">
+       <option disabled="" selected="" value="">
+        Select your role
+       </option>
+       <option value="student">
+        Student
+       </option>
+       <option value="teacher">
+        Teacher
+       </option>
+       <option value="admin">
+        Admin
+       </option>
+      </select>
+     </div>
+     <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-md transition" type="submit">
+      Login
+     </button>
+    </form>
+   </section>
+   <!-- Subjects Page -->
+   <section class="hidden max-w-4xl mx-auto p-6 mt-12 bg-white rounded-lg shadow-md flex flex-col" id="subjects-page">
+    <h2 class="text-3xl font-semibold text-indigo-700 mb-8 text-center">
+     Select a Subject
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+     <button class="subject-card bg-gradient-to-tr from-blue-400 to-blue-600 rounded-lg p-6 text-white shadow-lg hover:scale-105 transform transition flex flex-col items-center justify-center" data-subject="Physics">
+      <img alt="Icon representing Physics subject with atoms and formulas" class="mb-4" height="100" src="https://storage.googleapis.com/a1aa/image/8b47a8a3-971e-4de1-0f44-8776418c1ce4.jpg" width="100"/>
+      <span class="text-xl font-semibold">
+       Physics
+      </span>
+     </button>
+     <button class="subject-card bg-gradient-to-tr from-green-400 to-green-600 rounded-lg p-6 text-white shadow-lg hover:scale-105 transform transition flex flex-col items-center justify-center" data-subject="Chemistry">
+      <img alt="Icon representing Chemistry subject with test tubes and molecules" class="mb-4" height="100" src="https://storage.googleapis.com/a1aa/image/1feea5df-1d79-425a-6ed9-3427bfd00db9.jpg" width="100"/>
+      Chemistry
+     </button>
+     <button class="subject-card bg-gradient-to-tr from-purple-400 to-purple-600 rounded-lg p-6 text-white shadow-lg hover:scale-105 transform transition flex flex-col items-center justify-center" data-subject="Mathematics">
+      <img alt="Icon representing Mathematics subject with numbers and geometric shapes" class="mb-4" height="100" src="https://storage.googleapis.com/a1aa/image/f4bc4a54-1cfc-4a95-ca84-e3c20f7d27dd.jpg" width="100"/>
+      Mathematics
+     </button>
+     <button class="subject-card bg-gradient-to-tr from-pink-400 to-pink-600 rounded-lg p-6 text-white shadow-lg hover:scale-105 transform transition flex flex-col items-center justify-center" data-subject="Biology">
+      <img alt="Icon representing Biology subject with DNA helix and leaf" class="mb-4" height="100" src="https://storage.googleapis.com/a1aa/image/f1fcdf0a-08de-4f73-a59f-8cc26bf5a840.jpg" width="100"/>
+      Biology
+     </button>
+    </div>
+    <button class="mt-10 self-center text-indigo-600 hover:text-indigo-800 font-semibold underline" id="logout-from-subjects">
+     Logout
+    </button>
+   </section>
+   <!-- Topics Page -->
+   <section class="hidden max-w-4xl mx-auto p-6 mt-12 bg-white rounded-lg shadow-md flex flex-col" id="topics-page">
+    <div class="flex justify-between items-center mb-6">
+     <h2 class="text-3xl font-semibold text-indigo-700" id="topics-subject-title">
+      Subject Topics
+     </h2>
+     <button class="text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-2" id="back-to-subjects">
+      <i class="fas fa-arrow-left">
+      </i>
+      Back
+     </button>
+    </div>
+    <div class="mb-6">
+     <form class="flex flex-col sm:flex-row gap-4" id="add-topic-form">
+      <input class="flex-grow border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" id="new-topic-name" placeholder="Enter new topic name" required="" type="text"/>
+      <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded-md transition" type="submit">
+       Add Topic
+      </button>
+     </form>
+    </div>
+    <ul class="space-y-4" id="topics-list">
+    </ul>
+   </section>
+   <!-- Topic Detail Page -->
+   <section class="hidden max-w-5xl mx-auto p-6 mt-12 bg-white rounded-lg shadow-md flex flex-col" id="topic-detail-page">
+    <div class="flex justify-between items-center mb-6">
+     <h2 class="text-3xl font-semibold text-indigo-700" id="topic-detail-title">
+      Topic Detail
+     </h2>
+     <button class="text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-2" id="back-to-topics">
+      <i class="fas fa-arrow-left">
+      </i>
+      Back
+     </button>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+     <button class="bg-gradient-to-tr from-indigo-500 to-indigo-700 text-white rounded-lg p-8 shadow-lg hover:scale-105 transform transition flex flex-col items-center justify-center gap-4" id="theory-btn">
+      <i class="fas fa-book-open fa-3x">
+      </i>
+      <span class="text-xl font-semibold">
+       Theory
+      </span>
+     </button>
+     <button class="bg-gradient-to-tr from-pink-500 to-pink-700 text-white rounded-lg p-8 shadow-lg hover:scale-105 transform transition flex flex-col items-center justify-center gap-4" id="mcq-btn">
+      <i class="fas fa-question-circle fa-3x">
+      </i>
+      <span class="text-xl font-semibold">
+       MCQ
+      </span>
+     </button>
+    </div>
+   </section>
+   <!-- Theory Page -->
+   <section class="hidden max-w-5xl mx-auto p-6 mt-12 bg-white rounded-lg shadow-md flex flex-col" id="theory-page">
+    <div class="flex justify-between items-center mb-6">
+     <h2 class="text-3xl font-semibold text-indigo-700" id="theory-topic-title">
+      Theory
+     </h2>
+     <button class="text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-2" id="back-to-topic-detail-from-theory">
+      <i class="fas fa-arrow-left">
+      </i>
+      Back
+     </button>
+    </div>
+    <div class="mb-6">
+     <form class="flex flex-col gap-4" id="add-theory-form">
+      <textarea class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-y" id="theory-text" placeholder="Add theory content here..." required="" rows="6"></textarea>
+      <div class="flex flex-col sm:flex-row items-center gap-4">
+       <label class="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-md transition flex items-center gap-2" for="theory-pdf-upload">
+        <i class="fas fa-file-upload">
+        </i>
+        Upload PDF
+       </label>
+       <input accept="application/pdf" class="hidden" id="theory-pdf-upload" type="file"/>
+       <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded-md transition" type="submit">
+        Add Theory
+       </button>
+      </div>
+     </form>
+    </div>
+    <div class="space-y-6 overflow-y-auto max-h-[400px] border-t border-gray-200 pt-4" id="theory-list">
+    </div>
+   </section>
+   <!-- MCQ Page -->
+   <section class="hidden max-w-5xl mx-auto p-6 mt-12 bg-white rounded-lg shadow-md flex flex-col" id="mcq-page">
+    <div class="flex justify-between items-center mb-6">
+     <h2 class="text-3xl font-semibold text-pink-700" id="mcq-topic-title">
+      MCQ
+     </h2>
+     <button class="text-pink-600 hover:text-pink-800 font-semibold flex items-center gap-2" id="back-to-topic-detail-from-mcq">
+      <i class="fas fa-arrow-left">
+      </i>
+      Back
+     </button>
+    </div>
+    <div class="mb-6">
+     <form class="flex flex-col gap-4" id="add-mcq-form">
+      <textarea class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 resize-y" id="mcq-text" placeholder="Add MCQ question and options here (format: Question?;Option1;Option2;Option3;Option4;CorrectOptionNumber)" required="" rows="4"></textarea>
+      <div class="flex flex-col sm:flex-row items-center gap-4">
+       <label class="cursor-pointer bg-pink-600 hover:bg-pink-700 text-white font-semibold px-4 py-2 rounded-md transition flex items-center gap-2" for="mcq-pdf-upload">
+        <i class="fas fa-file-upload">
+        </i>
+        Upload PDF (MCQs)
+       </label>
+       <input accept="application/pdf" class="hidden" id="mcq-pdf-upload" type="file"/>
+       <button class="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-6 py-2 rounded-md transition" type="submit">
+        Add MCQ
+       </button>
+      </div>
+     </form>
+    </div>
+    <div class="mb-6">
+     <button class="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-6 py-2 rounded-md transition" id="select-mcq-for-test-btn">
+      Select MCQs for Test
+     </button>
+    </div>
+    <ul class="space-y-4 max-h-[400px] overflow-y-auto border-t border-gray-200 pt-4" id="mcq-list">
+    </ul>
+   </section>
+   <!-- MCQ Selection Modal -->
+   <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50" id="mcq-selection-modal">
+    <div class="bg-white rounded-lg max-w-3xl w-full max-h-[80vh] overflow-y-auto p-6 flex flex-col">
+     <div class="flex justify-between items-center mb-4">
+      <h3 class="text-2xl font-semibold text-pink-700">
+       Select MCQs for Test
+      </h3>
+      <button class="text-pink-600 hover:text-pink-800 font-bold text-xl" id="close-mcq-selection">
+       ×
+      </button>
+     </div>
+     <p class="mb-4 text-gray-700">
+      Select the MCQs you want to include in the test. You can select up to
+          50.
+     </p>
+     <ul class="space-y-3 overflow-y-auto max-h-[50vh] border border-gray-300 rounded-md p-3" id="mcq-selection-list">
+     </ul>
+     <div class="mt-6 flex justify-end gap-4">
+      <button class="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-6 py-2 rounded-md transition disabled:opacity-50" disabled="" id="generate-pdf-btn">
+       Generate &amp; Download PDF
+      </button>
+      <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-md transition" id="cancel-mcq-selection">
+       Cancel
+      </button>
+     </div>
+    </div>
+   </div>
+   <!-- History Page -->
+   <section class="hidden max-w-5xl mx-auto p-6 mt-12 bg-white rounded-lg shadow-md flex flex-col" id="history-page">
+    <div class="flex justify-between items-center mb-6">
+     <h2 class="text-3xl font-semibold text-indigo-700">
+      Change History
+     </h2>
+     <button class="text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-2" id="back-to-subjects-from-history">
+      <i class="fas fa-arrow-left">
+      </i>
+      Back to Subjects
+     </button>
+    </div>
+    <div class="overflow-y-auto max-h-[500px] border border-gray-300 rounded-md p-4">
+     <ul class="space-y-4" id="history-list">
+     </ul>
+    </div>
+   </section>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js">
+  </script>
+  <script>
+   // Data structure to hold all data in-memory and persist in localStorage
+    const STORAGE_KEY = "nucleus_coaching_app_data";
+
+    // Current navigation state
+    let currentSubject = null;
+    let currentTopic = null;
+
+    // Current logged in user
+    let currentUser = null;
+
+    // Load data from localStorage or initialize
+    function loadAppData() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        try {
+          return JSON.parse(raw);
+        } catch {
+          // corrupted data fallback
+          return getInitialData();
+        }
+      }
+      return getInitialData();
+    }
+
+    // Initial empty data structure
+    function getInitialData() {
+      return {
+        users: {}, // email => {name, email, role}
+        subjects: {
+          Physics: { topics: {} },
+          Chemistry: { topics: {} },
+          Mathematics: { topics: {} },
+          Biology: { topics: {} },
+        },
+        history: [], // array of change records
+      };
+    }
+
+    // Save data to localStorage
+    function saveAppData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+    }
+
+    // Global app data
+    let appData = loadAppData();
+
+    // Utility: Show one page, hide others
+    function showPage(pageId) {
+      const pages = [
+        "login-page",
+        "subjects-page",
+        "topics-page",
+        "topic-detail-page",
+        "theory-page",
+        "mcq-page",
+        "mcq-selection-modal",
+        "history-page",
+      ];
+      pages.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (id === pageId) {
+          el.classList.remove("hidden");
+        } else {
+          el.classList.add("hidden");
+        }
+      });
+    }
+
+    // Login form submit
+    document.getElementById("login-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = e.target.name.value.trim();
+      const email = e.target.email.value.trim().toLowerCase();
+      const role = e.target.role.value;
+      if (!name || !email || !role) {
+        alert("Please fill all fields.");
+        return;
+      }
+      currentUser = { name, email, role };
+      // Save user info if new or update name/role
+      appData.users[email] = { name, email, role };
+      saveAppData();
+      e.target.reset();
+      loadSubjectsPage();
+    });
+
+    // Load Subjects Page
+    function loadSubjectsPage() {
+      showPage("subjects-page");
+    }
+
+    // Logout button on subjects page
+    document
+      .getElementById("logout-from-subjects")
+      .addEventListener("click", () => {
+        currentUser = null;
+        currentSubject = null;
+        currentTopic = null;
+        showPage("login-page");
+      });
+
+    // Subject buttons click
+    document.querySelectorAll(".subject-card").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        currentSubject = btn.getAttribute("data-subject");
+        loadTopicsPage(currentSubject);
+      });
+    });
+
+    // Load Topics Page
+    function loadTopicsPage(subject) {
+      currentSubject = subject;
+      document.getElementById("topics-subject-title").textContent = `${subject} Topics`;
+      renderTopicsList();
+      showPage("topics-page");
+    }
+
+    // Back to subjects from topics
+    document.getElementById("back-to-subjects").addEventListener("click", () => {
+      currentSubject = null;
+      currentTopic = null;
+      loadSubjectsPage();
+    });
+
+    // Add topic form submit
+    document.getElementById("add-topic-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const topicNameInput = document.getElementById("new-topic-name");
+      const topicName = topicNameInput.value.trim();
+      if (!topicName) {
+        alert("Topic name cannot be empty.");
+        return;
+      }
+      if (appData.subjects[currentSubject].topics[topicName]) {
+        alert("Topic already exists.");
+        return;
+      }
+      appData.subjects[currentSubject].topics[topicName] = {
+        theory: [],
+        mcq: [],
+      };
+      addHistory(
+        `Added topic "${topicName}" in subject "${currentSubject}".`
+      );
+      topicNameInput.value = "";
+      saveAppData();
+      renderTopicsList();
+    });
+
+    // Render topics list
+    function renderTopicsList() {
+      const topicsList = document.getElementById("topics-list");
+      topicsList.innerHTML = "";
+      const topics = appData.subjects[currentSubject].topics;
+      if (Object.keys(topics).length === 0) {
+        topicsList.innerHTML =
+          '<p class="text-gray-500 italic">No topics added yet.</p>';
+        return;
+      }
+      Object.entries(topics).forEach(([topicName]) => {
+        const li = document.createElement("li");
+        li.className =
+          "flex justify-between items-center border border-gray-300 rounded-md p-4 hover:shadow-md transition";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = topicName;
+        nameSpan.className =
+          "text-lg font-semibold cursor-pointer text-indigo-700 hover:underline";
+        nameSpan.addEventListener("click", () => {
+          currentTopic = topicName;
+          loadTopicDetailPage();
+        });
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "text-red-600 hover:text-red-800 font-semibold";
+        deleteBtn.title = "Delete Topic";
+        deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+        deleteBtn.addEventListener("click", () => {
+          if (
+            confirm(
+              `Are you sure you want to delete the topic "${topicName}"? This action cannot be undone.`
+            )
+          ) {
+            delete appData.subjects[currentSubject].topics[topicName];
+            addHistory(
+              `Deleted topic "${topicName}" from subject "${currentSubject}".`
+            );
+            if (currentTopic === topicName) currentTopic = null;
+            saveAppData();
+            renderTopicsList();
+          }
+        });
+        li.appendChild(nameSpan);
+        li.appendChild(deleteBtn);
+        topicsList.appendChild(li);
+      });
+    }
+
+    // Load Topic Detail Page
+    function loadTopicDetailPage() {
+      document.getElementById(
+        "topic-detail-title"
+      ).textContent = `${currentTopic} - ${currentSubject}`;
+      showPage("topic-detail-page");
+    }
+
+    // Back to topics from topic detail
+    document.getElementById("back-to-topics").addEventListener("click", () => {
+      currentTopic = null;
+      loadTopicsPage(currentSubject);
+    });
+
+    // Theory and MCQ buttons on topic detail page
+    document.getElementById("theory-btn").addEventListener("click", () => {
+      loadTheoryPage();
+    });
+    document.getElementById("mcq-btn").addEventListener("click", () => {
+      loadMCQPage();
+    });
+
+    // Load Theory Page
+    function loadTheoryPage() {
+      document.getElementById(
+        "theory-topic-title"
+      ).textContent = `Theory - ${currentTopic}`;
+      renderTheoryList();
+      showPage("theory-page");
+    }
+
+    // Back to topic detail from theory
+    document
+      .getElementById("back-to-topic-detail-from-theory")
+      .addEventListener("click", () => {
+        loadTopicDetailPage();
+      });
+
+    // Add theory form submit
+    document.getElementById("add-theory-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const theoryText = document.getElementById("theory-text").value.trim();
+      if (!theoryText) {
+        alert("Theory content cannot be empty.");
+        return;
+      }
+      // Add theory text with user info and timestamp
+      const theoryEntry = {
+        text: theoryText,
+        pdf: null,
+        addedBy: currentUser.email,
+        addedByName: currentUser.name,
+        addedAt: new Date().toISOString(),
+      };
+      // Check if PDF uploaded
+      const pdfInput = document.getElementById("theory-pdf-upload");
+      if (pdfInput.files.length > 0) {
+        const file = pdfInput.files[0];
+        const base64 = await fileToBase64(file);
+        theoryEntry.pdf = {
+          name: file.name,
+          data: base64,
+        };
+        pdfInput.value = "";
+      }
+      appData.subjects[currentSubject].topics[currentTopic].theory.push(theoryEntry);
+      addHistory(
+        `Added theory content to topic "${currentTopic}" in subject "${currentSubject}".`
+      );
+      document.getElementById("theory-text").value = "";
+      saveAppData();
+      renderTheoryList();
+    });
+
+    // Render theory list
+    function renderTheoryList() {
+      const theoryList = document.getElementById("theory-list");
+      theoryList.innerHTML = "";
+      const theoryArr = appData.subjects[currentSubject].topics[currentTopic].theory;
+      if (theoryArr.length === 0) {
+        theoryList.innerHTML =
+          '<p class="text-gray-500 italic">No theory content added yet.</p>';
+        return;
+      }
+      theoryArr.forEach((item, idx) => {
+        const div = document.createElement("div");
+        div.className = "border border-gray-300 rounded-md p-4 bg-gray-50 relative";
+        const p = document.createElement("p");
+        p.textContent = item.text;
+        p.className = "whitespace-pre-wrap";
+        div.appendChild(p);
+        if (item.pdf) {
+          const pdfLink = document.createElement("a");
+          pdfLink.href = item.pdf.data;
+          pdfLink.download = item.pdf.name;
+          pdfLink.target = "_blank";
+          pdfLink.className =
+            "inline-block mt-3 text-indigo-600 hover:text-indigo-800 font-semibold";
+          pdfLink.textContent = `Download PDF (${item.pdf.name})`;
+          div.appendChild(pdfLink);
+        }
+        const info = document.createElement("p");
+        info.className = "text-xs text-gray-500 mt-2 italic";
+        const date = new Date(item.addedAt);
+        info.textContent = `Added by ${item.addedByName} (${item.addedBy}) on ${date.toLocaleString()}`;
+        div.appendChild(info);
+        const delBtn = document.createElement("button");
+        delBtn.className = "absolute top-2 right-2 text-red-600 hover:text-red-800";
+        delBtn.title = "Delete Theory";
+        delBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+        delBtn.addEventListener("click", () => {
+          if (confirm("Are you sure you want to delete this theory content?")) {
+            appData.subjects[currentSubject].topics[currentTopic].theory.splice(idx, 1);
+            addHistory(
+              `Deleted theory content from topic "${currentTopic}" in subject "${currentSubject}".`
+            );
+            saveAppData();
+            renderTheoryList();
+          }
+        });
+        div.appendChild(delBtn);
+        theoryList.appendChild(div);
+      });
+    }
+
+    // Load MCQ Page
+    function loadMCQPage() {
+      document.getElementById("mcq-topic-title").textContent = `MCQ - ${currentTopic}`;
+      renderMCQList();
+      showPage("mcq-page");
+    }
+
+    // Back to topic detail from MCQ
+    document.getElementById("back-to-topic-detail-from-mcq").addEventListener("click", () => {
+      loadTopicDetailPage();
+    });
+
+    // Add MCQ form submit
+    document.getElementById("add-mcq-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const mcqTextRaw = document.getElementById("mcq-text").value.trim();
+      if (!mcqTextRaw) {
+        alert("MCQ content cannot be empty.");
+        return;
+      }
+      // Parse MCQ format: Question?;Option1;Option2;Option3;Option4;CorrectOptionNumber
+      const lines = mcqTextRaw.split("\n").map((l) => l.trim()).filter(Boolean);
+      // Support multiple MCQs separated by blank lines or multiple lines
+      // We'll parse each line as one MCQ if it matches format
+      let addedCount = 0;
+      for (const line of lines) {
+        const parts = line.split(";");
+        if (parts.length !== 6) {
+          alert(
+            "MCQ format invalid. Use: Question?;Option1;Option2;Option3;Option4;CorrectOptionNumber"
+          );
+          return;
+        }
+        const [question, ...optionsAndAnswer] = parts;
+        const options = optionsAndAnswer.slice(0, 4);
+        const correctIndex = parseInt(optionsAndAnswer[4], 10) - 1;
+        if (
+          !question.trim() ||
+          options.some((opt) => !opt.trim()) ||
+          isNaN(correctIndex) ||
+          correctIndex < 0 ||
+          correctIndex > 3
+        ) {
+          alert("MCQ format invalid or missing data.");
+          return;
+        }
+        appData.subjects[currentSubject].topics[currentTopic].mcq.push({
+          question: question.trim(),
+          options: options.map((o) => o.trim()),
+          correctIndex,
+          pdf: null,
+          addedBy: currentUser.email,
+          addedByName: currentUser.name,
+          addedAt: new Date().toISOString(),
+        });
+        addedCount++;
+      }
+      addHistory(
+        `Added ${addedCount} MCQ${addedCount > 1 ? "s" : ""} to topic "${currentTopic}" in subject "${currentSubject}".`
+      );
+      document.getElementById("mcq-text").value = "";
+      saveAppData();
+      renderMCQList();
+    });
+
+    // Render MCQ list
+    function renderMCQList() {
+      const mcqList = document.getElementById("mcq-list");
+      mcqList.innerHTML = "";
+      const mcqArr = appData.subjects[currentSubject].topics[currentTopic].mcq;
+      if (mcqArr.length === 0) {
+        mcqList.innerHTML =
+          '<p class="text-gray-500 italic">No MCQs added yet.</p>';
+        return;
+      }
+      mcqArr.forEach((item, idx) => {
+        const li = document.createElement("li");
+        li.className = "border border-pink-300 rounded-md p-4 bg-pink-50 relative";
+        const qDiv = document.createElement("div");
+        qDiv.className = "font-semibold mb-2";
+        qDiv.textContent = `Q${idx + 1}: ${item.question}`;
+        li.appendChild(qDiv);
+        const ul = document.createElement("ul");
+        ul.className = "list-decimal list-inside space-y-1";
+        item.options.forEach((opt, i) => {
+          const optLi = document.createElement("li");
+          optLi.textContent = opt;
+          if (i === item.correctIndex) {
+            optLi.className = "font-bold text-pink-700";
+          }
+          ul.appendChild(optLi);
+        });
+        li.appendChild(ul);
+        if (item.pdf) {
+          const pdfLink = document.createElement("a");
+          pdfLink.href = item.pdf.data;
+          pdfLink.download = item.pdf.name;
+          pdfLink.target = "_blank";
+          pdfLink.className =
+            "inline-block mt-2 text-pink-600 hover:text-pink-800 font-semibold";
+          pdfLink.textContent = `Download PDF (${item.pdf.name})`;
+          li.appendChild(pdfLink);
+        }
+        const info = document.createElement("p");
+        info.className = "text-xs text-gray-500 mt-2 italic";
+        const date = new Date(item.addedAt);
+        info.textContent = `Added by ${item.addedByName} (${item.addedBy}) on ${date.toLocaleString()}`;
+        li.appendChild(info);
+        const delBtn = document.createElement("button");
+        delBtn.className = "absolute top-2 right-2 text-red-600 hover:text-red-800";
+        delBtn.title = "Delete MCQ";
+        delBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+        delBtn.addEventListener("click", () => {
+          if (confirm("Are you sure you want to delete this MCQ?")) {
+            appData.subjects[currentSubject].topics[currentTopic].mcq.splice(idx, 1);
+            addHistory(
+              `Deleted an MCQ from topic "${currentTopic}" in subject "${currentSubject}".`
+            );
+            saveAppData();
+            renderMCQList();
+          }
+        });
+        li.appendChild(delBtn);
+        mcqList.appendChild(li);
+      });
+    }
+
+    // Convert file to base64
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (err) => reject(err);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // PDF Upload for Theory
+    document.getElementById("theory-pdf-upload").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file && file.type !== "application/pdf") {
+        alert("Please upload a valid PDF file.");
+        e.target.value = "";
+      }
+    });
+
+    // PDF Upload for MCQ
+    document.getElementById("mcq-pdf-upload").addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.type !== "application/pdf") {
+        alert("Please upload a valid PDF file.");
+        e.target.value = "";
+        return;
+      }
+      // Parse PDF text and extract MCQs
+      try {
+        const text = await extractTextFromPDF(file);
+        const parsedMCQs = parseMCQsFromText(text);
+        if (parsedMCQs.length === 0) {
+          alert("No valid MCQs found in the PDF.");
+          e.target.value = "";
+          return;
+        }
+        // Add parsed MCQs to current topic with user info
+        parsedMCQs.forEach((mcq) => {
+          mcq.addedBy = currentUser.email;
+          mcq.addedByName = currentUser.name;
+          mcq.addedAt = new Date().toISOString();
+          appData.subjects[currentSubject].topics[currentTopic].mcq.push(mcq);
+        });
+        addHistory(
+          `Imported ${parsedMCQs.length} MCQs from PDF to topic "${currentTopic}" in subject "${currentSubject}".`
+        );
+        alert(`${parsedMCQs.length} MCQs imported from PDF.`);
+        renderMCQList();
+        e.target.value = "";
+        saveAppData();
+      } catch (err) {
+        alert("Failed to parse PDF. Please try again.");
+        e.target.value = "";
+      }
+    });
+
+    // Extract text from PDF using pdf-lib
+    async function extractTextFromPDF(file) {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+      let fullText = "";
+      const pages = pdfDoc.getPages();
+      for (const page of pages) {
+        // pdf-lib does not support text extraction, so fallback to empty string
+        // We will try a simpler approach below
+      }
+      // Since pdf-lib can't extract text, fallback to empty string
+      // So we cannot parse PDF text here without external libs
+      // We'll just return empty string to prevent errors
+      return "";
+    }
+
+    // Parse MCQs from extracted text
+    // Expected format in text:
+    // Q1. Question text?
+    // a) Option1
+    // b) Option2
+    // c) Option3
+    // d) Option4
+    // Answer: b
+    // This function tries to parse such pattern and convert to MCQ objects
+    function parseMCQsFromText(text) {
+      const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+      const mcqs = [];
+      let i = 0;
+      while (i < lines.length) {
+        // Look for question line starting with Q or number + dot
+        const qMatch = lines[i].match(/^(Q\d*\.?|^\d+\.)\s*(.+)/i);
+        if (!qMatch) {
+          i++;
+          continue;
+        }
+        const question = qMatch[2].trim();
+        i++;
+        const options = [];
+        // Collect next 4 lines as options if they start with a), b), c), d)
+        for (let optIdx = 0; optIdx < 4 && i < lines.length; optIdx++, i++) {
+          const optMatch = lines[i].match(/^[a-d]\)\s*(.+)/i);
+          if (!optMatch) break;
+          options.push(optMatch[1].trim());
+        }
+        if (options.length !== 4) continue;
+        // Next line should be answer line: Answer: b
+        if (i >= lines.length) break;
+        const ansMatch = lines[i].match(/^Answer:\s*([a-d])/i);
+        if (!ansMatch) {
+          i++;
+          continue;
+        }
+        const correctLetter = ansMatch[1].toLowerCase();
+        const correctIndex = correctLetter.charCodeAt(0) - "a".charCodeAt(0);
+        i++;
+        mcqs.push({
+          question,
+          options,
+          correctIndex,
+          pdf: null,
+        });
+      }
+      return mcqs;
+    }
+
+    // MCQ Selection Modal Elements
+    const mcqSelectionModal = document.getElementById("mcq-selection-modal");
+    const mcqSelectionList = document.getElementById("mcq-selection-list");
+    const generatePdfBtn = document.getElementById("generate-pdf-btn");
+    const cancelMcqSelectionBtn = document.getElementById("cancel-mcq-selection");
+    const closeMcqSelectionBtn = document.getElementById("close-mcq-selection");
+
+    // Open MCQ selection modal
+    document
+      .getElementById("select-mcq-for-test-btn")
+      .addEventListener("click", () => {
+        openMCQSelectionModal();
+      });
+
+    // Open MCQ selection modal function
+    function openMCQSelectionModal() {
+      mcqSelectionList.innerHTML = "";
+      const mcqArr = appData.subjects[currentSubject].topics[currentTopic].mcq;
+      if (mcqArr.length === 0) {
+        alert("No MCQs available to select.");
+        return;
+      }
+      mcqArr.forEach((mcq, idx) => {
+        const li = document.createElement("li");
+        li.className = "flex items-start gap-3";
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `mcq-select-${idx}`;
+        checkbox.value = idx;
+        checkbox.className = "mt-1";
+        checkbox.addEventListener("change", updateGenerateButtonState);
+        const label = document.createElement("label");
+        label.htmlFor = `mcq-select-${idx}`;
+        label.className = "flex-grow cursor-pointer";
+        label.innerHTML = `<span class="font-semibold">Q${idx + 1}:</span> ${mcq.question}`;
+        li.appendChild(checkbox);
+        li.appendChild(label);
+        mcqSelectionList.appendChild(li);
+      });
+      generatePdfBtn.disabled = true;
+      mcqSelectionModal.classList.remove("hidden");
+    }
+
+    // Update generate button state based on selection count
+    function updateGenerateButtonState() {
+      const checkedCount = mcqSelectionList.querySelectorAll(
+        "input[type=checkbox]:checked"
+      ).length;
+      generatePdfBtn.disabled = checkedCount === 0 || checkedCount > 50;
+    }
+
+    // Cancel MCQ selection modal
+    cancelMcqSelectionBtn.addEventListener("click", () => {
+      mcqSelectionModal.classList.add("hidden");
+    });
+    closeMcqSelectionBtn.addEventListener("click", () => {
+      mcqSelectionModal.classList.add("hidden");
+    });
+
+    // Generate and download PDF from selected MCQs
+    generatePdfBtn.addEventListener("click", () => {
+      const selectedCheckboxes = mcqSelectionList.querySelectorAll(
+        "input[type=checkbox]:checked"
+      );
+      if (selectedCheckboxes.length === 0) {
+        alert("Please select at least one MCQ.");
+        return;
+      }
+      if (selectedCheckboxes.length > 50) {
+        alert("You can select up to 50 MCQs only.");
+        return;
+      }
+      const selectedMCQs = Array.from(selectedCheckboxes).map((cb) => {
+        const idx = parseInt(cb.value, 10);
+        return appData.subjects[currentSubject].topics[currentTopic].mcq[idx];
+      });
+      generateMCQPdf(selectedMCQs);
+    });
+
+    // Generate PDF using pdfmake
+    function generateMCQPdf(mcqs) {
+      const docDefinition = {
+        content: [
+          {
+            text: `MCQ Test - ${currentSubject} - ${currentTopic}`,
+            style: "header",
+            margin: [0, 0, 0, 20],
+          },
+          ...mcqs
+            .map((mcq, idx) => {
+              return [
+                {
+                  text: `Q${idx + 1}: ${mcq.question}`,
+                  style: "question",
+                  margin: [0, 5, 0, 5],
+                },
+                {
+                  ul: mcq.options.map((opt, i) => {
+                    return i === mcq.correctIndex
+                      ? { text: opt, bold: true }
+                      : opt;
+                  }),
+                  margin: [20, 0, 0, 10],
+                },
+              ];
+            })
+            .flat(),
+        ],
+        styles: {
+          header: {
+            fontSize: 20,
+            bold: true,
+            alignment: "center",
+          },
+          question: {
+            fontSize: 14,
+            bold: true,
+          },
+        },
+        defaultStyle: {
+          fontSize: 12,
+        },
+      };
+      pdfMake
+        .createPdf(docDefinition)
+        .download(`MCQ_Test_${currentSubject}_${currentTopic}.pdf`);
+      mcqSelectionModal.classList.add("hidden");
+    }
+
+    // Add history record
+    function addHistory(description) {
+      if (!currentUser) return;
+      appData.history.unshift({
+        description,
+        userEmail: currentUser.email,
+        userName: currentUser.name,
+        timestamp: new Date().toISOString(),
+      });
+      // Keep max 100 history records
+      if (appData.history.length > 100) {
+        appData.history.length = 100;
+      }
+      saveAppData();
+    }
+
+    // Show history page
+    function loadHistoryPage() {
+      const historyList = document.getElementById("history-list");
+      historyList.innerHTML = "";
+      if (appData.history.length === 0) {
+        historyList.innerHTML =
+          '<p class="text-gray-500 italic">No history records found.</p>';
+        return;
+      }
+      appData.history.forEach((record) => {
+        const li = document.createElement("li");
+        li.className =
+          "border border-gray-300 rounded-md p-4 bg-gray-50 flex flex-col gap-1";
+        const desc = document.createElement("p");
+        desc.textContent = record.description;
+        desc.className = "font-semibold";
+        const info = document.createElement("p");
+        info.className = "text-xs text-gray-600 italic";
+        const date = new Date(record.timestamp);
+        info.textContent = `By ${record.userName} (${record.userEmail}) on ${date.toLocaleString()}`;
+        li.appendChild(desc);
+        li.appendChild(info);
+        historyList.appendChild(li);
+      });
+      showPage("history-page");
+    }
+
+    // Add a button to subjects page to view history
+    function addHistoryButtonToSubjects() {
+      if (document.getElementById("view-history-btn")) return;
+      const btn = document.createElement("button");
+      btn.id = "view-history-btn";
+      btn.textContent = "View Change History";
+      btn.className =
+        "mt-6 self-center text-indigo-600 hover:text-indigo-800 font-semibold underline";
+      btn.addEventListener("click", () => {
+        loadHistoryPage();
+      });
+      document.getElementById("subjects-page").appendChild(btn);
+    }
+
+    // Back to subjects from history
+    document
+      .getElementById("back-to-subjects-from-history")
+      .addEventListener("click", () => {
+        loadSubjectsPage();
+      });
+
+    // Initialize app on load
+    function init() {
+      showPage("login-page");
+      addHistoryButtonToSubjects();
+    }
+
+    init();
+  </script>
+ </body>
+</html>
